@@ -178,7 +178,7 @@ The current EDA supports the following design choices:
 5. Remove physically implausible records from the raw table before any custom preprocessing.
 6. Compare simple baselines against a PyTorch multivariate forecasting model, especially on recent years where regime shift is more visible.
 
-## Reproducibility
+## Files
 
 Main script:
 - `EDA Report/eda/generate_eda.py`
@@ -188,12 +188,3 @@ Figures:
 
 Summary tables:
 - `EDA Report/eda/outputs`
-
-Recommended micromamba command:
-
-```bash
-micromamba env create -f "EDA Report/eda/environment-micromamba.yml"
-micromamba run -n comp0197-pytorch-eda python "EDA Report/eda/generate_eda.py"
-```
-
-The EDA script itself depends on `pandas`, `numpy`, and `matplotlib`. The environment file also includes `pytorch` so that the analysis environment matches the framework choice for the later modelling stage.
