@@ -1,0 +1,10 @@
+name: comp0197-pytorch-eda
+channels:
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - matplotlib
+  - pytorch

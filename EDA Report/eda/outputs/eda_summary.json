@@ -38,5 +38,20 @@
   "solar_capacity_2024": 17064.104363279814,
   "nd_tsd_corr": 0.992038146448049,
   "wind_nd_corr": -0.15765693486268562,
-  "solar_nd_corr": -0.15434449442043757
+  "solar_nd_corr": -0.15434449442043757,
+  "weekday_weekend_gap_1800_mw": 4376.379604923648,
+  "top_positive_correlations_with_nd": {
+    "nd": 1.0,
+    "england_wales_demand": 0.9983373358755557,
+    "tsd": 0.992038146448049,
+    "britned_flow": 0.0954001967422155,
+    "ifa_flow": -0.06054918859966163
+  },
+  "top_negative_correlations_with_nd": {
+    "pump_storage_pumping": -0.458090454513908,
+    "moyle_flow": -0.2761843233010863,
+    "is_weekend": -0.22918991296131316,
+    "east_west_flow": -0.1651985780348688,
+    "embedded_wind_generation": -0.15765693486268562
+  }
 }

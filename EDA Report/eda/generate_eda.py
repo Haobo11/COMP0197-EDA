@@ -37,7 +37,9 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     clean["date"] = clean["settlement_date"].dt.date
     clean["year"] = clean["settlement_date"].dt.year
     clean["month"] = clean["settlement_date"].dt.month
+    clean["day_of_week"] = clean["settlement_date"].dt.dayofweek
     clean["hour"] = (clean["settlement_period"] - 1) / 2
+    clean["is_weekend"] = clean["day_of_week"].isin([5, 6]).astype(int)
     clean["season"] = clean["month"].map(
         {
             12: "Winter",
@@ -243,6 +245,63 @@ def plot_renewables_transition(clean: pd.DataFrame) -> pd.DataFrame:
     return yearly
 
 
+def plot_weekday_weekend_effect(clean: pd.DataFrame) -> pd.DataFrame:
+    profile = (
+        clean.groupby(["is_weekend", "hour"])["nd"]
+        .mean()
+        .reset_index()
+        .pivot(index="hour", columns="is_weekend", values="nd")
+        .rename(columns={0: "Weekday", 1: "Weekend"})
+    )
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(profile.index, profile["Weekday"], label="Weekday", linewidth=2, color="#1d3557")
+    ax.plot(profile.index, profile["Weekend"], label="Weekend", linewidth=2, color="#6d597a")
+    ax.set_title("Weekday and weekend demand profiles differ most around commuting and business hours")
+    ax.set_xlabel("Hour of day")
+    ax.set_ylabel("Average ND (MW)")
+    ax.set_xticks(np.arange(0, 24, 2))
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(FIGURE_DIR / "figure_07_weekday_weekend_profile.png", dpi=200)
+    plt.close(fig)
+
+    return profile.reset_index()
+
+
+def plot_feature_correlation(clean: pd.DataFrame) -> pd.DataFrame:
+    cols = [
+        "nd",
+        "tsd",
+        "england_wales_demand",
+        "embedded_wind_generation",
+        "embedded_solar_generation",
+        "pump_storage_pumping",
+        "ifa_flow",
+        "britned_flow",
+        "moyle_flow",
+        "east_west_flow",
+        "nemo_flow",
+        "is_holiday",
+        "is_weekend",
+    ]
+    corr = clean[cols].corr(numeric_only=True)
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+    im = ax.imshow(corr.values, cmap="coolwarm", vmin=-1, vmax=1)
+    ax.set_xticks(range(len(cols)))
+    ax.set_xticklabels(cols, rotation=45, ha="right")
+    ax.set_yticks(range(len(cols)))
+    ax.set_yticklabels(cols)
+    ax.set_title("Correlation structure highlights strong target alignment and useful exogenous signals")
+    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    fig.tight_layout()
+    fig.savefig(FIGURE_DIR / "figure_08_feature_correlation.png", dpi=200)
+    plt.close(fig)
+
+    return corr
+
+
 def write_summary(
     raw_missing: pd.DataFrame,
     monthly: pd.DataFrame,
@@ -250,6 +309,8 @@ def write_summary(
     yearly: pd.DataFrame,
     holiday: pd.DataFrame,
     renewables: pd.DataFrame,
+    weekday_weekend: pd.DataFrame,
+    corr: pd.DataFrame,
     clean: pd.DataFrame,
 ) -> None:
     summary = {
@@ -275,6 +336,12 @@ def write_summary(
         "nd_tsd_corr": float(clean[["nd", "tsd"]].corr().iloc[0, 1]),
         "wind_nd_corr": float(clean[["nd", "embedded_wind_generation"]].corr().iloc[0, 1]),
         "solar_nd_corr": float(clean[["nd", "embedded_solar_generation"]].corr().iloc[0, 1]),
+        "weekday_weekend_gap_1800_mw": float(
+            weekday_weekend.loc[weekday_weekend["hour"] == 18.0, "Weekday"].iloc[0]
+            - weekday_weekend.loc[weekday_weekend["hour"] == 18.0, "Weekend"].iloc[0]
+        ),
+        "top_positive_correlations_with_nd": corr["nd"].sort_values(ascending=False).head(5).to_dict(),
+        "top_negative_correlations_with_nd": corr["nd"].sort_values().head(5).to_dict(),
     }
 
     (OUTPUT_DIR / "eda_summary.json").write_text(json.dumps(summary, indent=2))
@@ -284,6 +351,8 @@ def write_summary(
     yearly.to_csv(OUTPUT_DIR / "yearly_mean_nd.csv", index=False)
     holiday.to_csv(OUTPUT_DIR / "holiday_profile.csv", index=False)
     renewables.to_csv(OUTPUT_DIR / "renewables_transition.csv", index=False)
+    weekday_weekend.to_csv(OUTPUT_DIR / "weekday_weekend_profile.csv", index=False)
+    corr.to_csv(OUTPUT_DIR / "feature_correlation.csv")
 
 
 def main() -> None:
@@ -295,7 +364,9 @@ def main() -> None:
     yearly = plot_yearly_distribution(clean)
     holiday = plot_holiday_effect(clean)
     renewables = plot_renewables_transition(clean)
-    write_summary(raw_missing, monthly, intraday, yearly, holiday, renewables, clean)
+    weekday_weekend = plot_weekday_weekend_effect(clean)
+    corr = plot_feature_correlation(clean)
+    write_summary(raw_missing, monthly, intraday, yearly, holiday, renewables, weekday_weekend, corr, clean)
     print(f"Saved figures to {FIGURE_DIR}")
     print(f"Saved summary tables to {OUTPUT_DIR}")
 
