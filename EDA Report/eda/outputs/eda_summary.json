@@ -1,0 +1,42 @@
+{
+  "clean_rows": 278512,
+  "date_start": "2009-01-01 00:00:00",
+  "date_end": "2024-12-05 23:30:00",
+  "nd_mean": 31187.04136985121,
+  "nd_std": 7831.30654244327,
+  "tsd_mean": 32685.811142787385,
+  "holiday_nd_gap_mw": 4640.444658232649,
+  "winter_evening_peak_mw": 44929.18547249647,
+  "summer_evening_peak_mw": 31636.004791238876,
+  "top_missing_features": [
+    {
+      "feature": "greenlink_flow",
+      "missing_ratio": 0.9415606737710553
+    },
+    {
+      "feature": "viking_flow",
+      "missing_ratio": 0.8788243382605706
+    },
+    {
+      "feature": "scottish_transfer",
+      "missing_ratio": 0.8788243382605706
+    },
+    {
+      "feature": "eleclink_flow",
+      "missing_ratio": 0.6277071158473703
+    },
+    {
+      "feature": "nsl_flow",
+      "missing_ratio": 0.6277071158473703
+    }
+  ],
+  "year_2009_mean_nd": 35965.668120766844,
+  "year_2024_mean_nd": 26042.506495894104,
+  "wind_capacity_2009": 1642.0689932269545,
+  "wind_capacity_2024": 6575.45324181885,
+  "solar_capacity_2009": 0.0,
+  "solar_capacity_2024": 17064.104363279814,
+  "nd_tsd_corr": 0.992038146448049,
+  "wind_nd_corr": -0.15765693486268562,
+  "solar_nd_corr": -0.15434449442043757
+}

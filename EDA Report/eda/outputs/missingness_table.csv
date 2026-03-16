@@ -1,0 +1,25 @@
+feature,missing_ratio
+greenlink_flow,0.9415606737710553
+viking_flow,0.8788243382605706
+scottish_transfer,0.8788243382605706
+eleclink_flow,0.6277071158473703
+nsl_flow,0.6277071158473703
+Unnamed: 0,0.0
+settlement_date,0.0
+nemo_flow,0.0
+east_west_flow,0.0
+moyle_flow,0.0
+britned_flow,0.0
+ifa2_flow,0.0
+ifa_flow,0.0
+pump_storage_pumping,0.0
+non_bm_stor,0.0
+embedded_solar_capacity,0.0
+embedded_solar_generation,0.0
+embedded_wind_capacity,0.0
+embedded_wind_generation,0.0
+england_wales_demand,0.0
+tsd,0.0
+nd,0.0
+settlement_period,0.0
+is_holiday,0.0
