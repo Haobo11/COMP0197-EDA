@@ -1,13 +1,13 @@
 {
-  "clean_rows": 278512,
-  "date_start": "2009-01-01 00:00:00",
+  "clean_rows": 103956,
+  "date_start": "2019-01-01 00:00:00",
   "date_end": "2024-12-05 23:30:00",
-  "nd_mean": 31187.04136985121,
-  "nd_std": 7831.30654244327,
-  "tsd_mean": 32685.811142787385,
-  "holiday_nd_gap_mw": 4640.444658232649,
-  "winter_evening_peak_mw": 44929.18547249647,
-  "summer_evening_peak_mw": 31636.004791238876,
+  "nd_mean": 27277.198449343952,
+  "nd_std": 6345.288220467084,
+  "tsd_mean": 29035.87698641733,
+  "holiday_nd_gap_mw": 4010.7276372996057,
+  "winter_evening_peak_mw": 40059.635658914725,
+  "summer_evening_peak_mw": 27696.231884057972,
   "top_missing_features": [
     {
       "feature": "greenlink_flow",
@@ -30,28 +30,30 @@
       "missing_ratio": 0.6277071158473703
     }
   ],
-  "year_2009_mean_nd": 35965.668120766844,
-  "year_2024_mean_nd": 26042.506495894104,
-  "wind_capacity_2009": 1642.0689932269545,
-  "wind_capacity_2024": 6575.45324181885,
-  "solar_capacity_2009": 0.0,
-  "solar_capacity_2024": 17064.104363279814,
-  "nd_tsd_corr": 0.992038146448049,
-  "wind_nd_corr": -0.15765693486268562,
-  "solar_nd_corr": -0.15434449442043757,
-  "weekday_weekend_gap_1800_mw": 4376.379604923648,
+  "first_year": 2019,
+  "last_year": 2024,
+  "first_year_mean_nd": 29358.035392168054,
+  "last_year_mean_nd": 26042.506495894104,
+  "wind_capacity_first_year": 6178.360657609316,
+  "wind_capacity_last_year": 6575.45324181885,
+  "solar_capacity_first_year": 13076.624272177189,
+  "solar_capacity_last_year": 17064.104363279814,
+  "nd_tsd_corr": 0.9796734932556751,
+  "wind_nd_corr": 0.0559748918420538,
+  "solar_nd_corr": -0.07081499675079096,
+  "weekday_weekend_gap_1800_mw": 3424.2994091969595,
   "top_positive_correlations_with_nd": {
     "nd": 1.0,
-    "england_wales_demand": 0.9983373358755557,
-    "tsd": 0.992038146448049,
-    "britned_flow": 0.0954001967422155,
-    "ifa_flow": -0.06054918859966163
+    "england_wales_demand": 0.996855151859374,
+    "tsd": 0.9796734932556751,
+    "britned_flow": 0.3113568648550809,
+    "nemo_flow": 0.24919841581288352
   },
   "top_negative_correlations_with_nd": {
-    "pump_storage_pumping": -0.458090454513908,
-    "moyle_flow": -0.2761843233010863,
-    "is_weekend": -0.22918991296131316,
-    "east_west_flow": -0.1651985780348688,
-    "embedded_wind_generation": -0.15765693486268562
+    "pump_storage_pumping": -0.43637100139861906,
+    "is_weekend": -0.23782686678687698,
+    "is_holiday": -0.07585261367644006,
+    "embedded_solar_generation": -0.07081499675079096,
+    "moyle_flow": -0.047541643838766724
   }
 }

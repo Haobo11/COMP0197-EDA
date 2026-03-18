@@ -13,6 +13,8 @@ RAW_PATH = ROOT / "archive-2" / "historic_demand_2009_2024.csv"
 CLEAN_PATH = ROOT / "archive-2" / "historic_demand_2009_2024_noNaN.csv"
 OUTPUT_DIR = ROOT / "eda" / "outputs"
 FIGURE_DIR = ROOT / "eda" / "figures"
+ANALYSIS_START = pd.Timestamp("2019-01-01 00:00:00")
+ANALYSIS_END = pd.Timestamp("2024-12-05 23:30:00")
 
 
 plt.style.use("ggplot")
@@ -34,6 +36,10 @@ def ensure_dirs() -> None:
 def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     raw = pd.read_csv(RAW_PATH)
     clean = pd.read_csv(CLEAN_PATH, parse_dates=["settlement_date"])
+    clean = clean.loc[
+        (clean["settlement_date"] >= ANALYSIS_START)
+        & (clean["settlement_date"] <= ANALYSIS_END)
+    ].copy()
     clean["date"] = clean["settlement_date"].dt.date
     clean["year"] = clean["settlement_date"].dt.year
     clean["month"] = clean["settlement_date"].dt.month
@@ -313,6 +319,9 @@ def write_summary(
     corr: pd.DataFrame,
     clean: pd.DataFrame,
 ) -> None:
+    first_year = int(clean["year"].min())
+    last_year = int(clean["year"].max())
+
     summary = {
         "clean_rows": int(len(clean)),
         "date_start": str(clean["settlement_date"].min()),
@@ -327,12 +336,22 @@ def write_summary(
         "winter_evening_peak_mw": float(intraday.loc[intraday["hour"] == 18.0, "Winter"].iloc[0]),
         "summer_evening_peak_mw": float(intraday.loc[intraday["hour"] == 18.0, "Summer"].iloc[0]),
         "top_missing_features": raw_missing.head(5).to_dict(orient="records"),
-        "year_2009_mean_nd": float(yearly.loc[yearly["year"] == 2009, "mean_nd"].iloc[0]),
-        "year_2024_mean_nd": float(yearly.loc[yearly["year"] == 2024, "mean_nd"].iloc[0]),
-        "wind_capacity_2009": float(renewables.loc[renewables["year"] == 2009, "embedded_wind_capacity"].iloc[0]),
-        "wind_capacity_2024": float(renewables.loc[renewables["year"] == 2024, "embedded_wind_capacity"].iloc[0]),
-        "solar_capacity_2009": float(renewables.loc[renewables["year"] == 2009, "embedded_solar_capacity"].iloc[0]),
-        "solar_capacity_2024": float(renewables.loc[renewables["year"] == 2024, "embedded_solar_capacity"].iloc[0]),
+        "first_year": first_year,
+        "last_year": last_year,
+        "first_year_mean_nd": float(yearly.loc[yearly["year"] == first_year, "mean_nd"].iloc[0]),
+        "last_year_mean_nd": float(yearly.loc[yearly["year"] == last_year, "mean_nd"].iloc[0]),
+        "wind_capacity_first_year": float(
+            renewables.loc[renewables["year"] == first_year, "embedded_wind_capacity"].iloc[0]
+        ),
+        "wind_capacity_last_year": float(
+            renewables.loc[renewables["year"] == last_year, "embedded_wind_capacity"].iloc[0]
+        ),
+        "solar_capacity_first_year": float(
+            renewables.loc[renewables["year"] == first_year, "embedded_solar_capacity"].iloc[0]
+        ),
+        "solar_capacity_last_year": float(
+            renewables.loc[renewables["year"] == last_year, "embedded_solar_capacity"].iloc[0]
+        ),
         "nd_tsd_corr": float(clean[["nd", "tsd"]].corr().iloc[0, 1]),
         "wind_nd_corr": float(clean[["nd", "embedded_wind_generation"]].corr().iloc[0, 1]),
         "solar_nd_corr": float(clean[["nd", "embedded_solar_generation"]].corr().iloc[0, 1]),
