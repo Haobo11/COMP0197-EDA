@@ -1,0 +1,6 @@
+eda_signal,evidence,modeling_action
+High target autocorrelation at daily/weekly lags,figure_10_tsd_acf + target_autocorrelation.csv,Keep seq_len=48 and consider explicit lag-48/lag-336 features for ablation
+Holiday and weekend profile shifts are systematic,figure_05_holiday_effect + figure_07_weekday_weekend_profile,"Retain calendar features (is_holiday, weekend/working-day variants)"
+Lagged exogenous correlation differs by feature,figure_09_lagged_correlation + lag_correlation.csv,Prioritize lag engineering for exogenous features with persistent lag correlation
+Feature-target correlation changes by season,figure_11_seasonal_correlation + seasonal_correlation.csv,Check seasonal error slices and keep multivariate inputs for LSTM/Transformer
+Post-2020 level shift with strong annual cycle,figure_02_target_trend + figure_04_yearly_distribution,Use chronological split and report recent-period metrics; keep SARIMA as baseline

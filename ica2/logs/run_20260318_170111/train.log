@@ -1,0 +1,2 @@
+Epoch | Train NLL | Val NLL | Patience | LR
+  1/50 | -1.691896 | -2.368006 | 0/12 | 5.00e-04

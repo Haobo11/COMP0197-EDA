@@ -5,9 +5,9 @@
   "nd_mean": 27277.198449343952,
   "nd_std": 6345.288220467084,
   "tsd_mean": 29035.87698641733,
-  "holiday_nd_gap_mw": 4010.7276372996057,
-  "winter_evening_peak_mw": 40059.635658914725,
-  "summer_evening_peak_mw": 27696.231884057972,
+  "holiday_tsd_gap_mw": 3972.0900677701393,
+  "winter_evening_peak_tsd_mw": 41237.56976744186,
+  "summer_evening_peak_tsd_mw": 29292.244565217392,
   "top_missing_features": [
     {
       "feature": "greenlink_flow",
@@ -32,28 +32,32 @@
   ],
   "first_year": 2019,
   "last_year": 2024,
-  "first_year_mean_nd": 29358.035392168054,
-  "last_year_mean_nd": 26042.506495894104,
+  "first_year_mean_tsd": 30539.09635803174,
+  "last_year_mean_tsd": 27973.776443191568,
   "wind_capacity_first_year": 6178.360657609316,
   "wind_capacity_last_year": 6575.45324181885,
   "solar_capacity_first_year": 13076.624272177189,
   "solar_capacity_last_year": 17064.104363279814,
   "nd_tsd_corr": 0.9796734932556751,
-  "wind_nd_corr": 0.0559748918420538,
-  "solar_nd_corr": -0.07081499675079096,
-  "weekday_weekend_gap_1800_mw": 3424.2994091969595,
-  "top_positive_correlations_with_nd": {
-    "nd": 1.0,
-    "england_wales_demand": 0.996855151859374,
-    "tsd": 0.9796734932556751,
-    "britned_flow": 0.3113568648550809,
-    "nemo_flow": 0.24919841581288352
+  "wind_tsd_corr": 0.07622261745268526,
+  "solar_tsd_corr": -0.0958937977346729,
+  "weekday_weekend_gap_1800_mw": 3637.7838990491946,
+  "top_positive_correlations_with_tsd": {
+    "tsd": 1.0,
+    "nd": 0.9796734932556752,
+    "england_wales_demand": 0.9792842362370424,
+    "britned_flow": 0.2119355496101097,
+    "nemo_flow": 0.11872738182118696,
+    "ifa_flow": 0.09783440541815258
   },
-  "top_negative_correlations_with_nd": {
-    "pump_storage_pumping": -0.43637100139861906,
-    "is_weekend": -0.23782686678687698,
-    "is_holiday": -0.07585261367644006,
-    "embedded_solar_generation": -0.07081499675079096,
-    "moyle_flow": -0.047541643838766724
-  }
+  "top_negative_correlations_with_tsd": {
+    "pump_storage_pumping": -0.3772913998109209,
+    "is_weekend": -0.2655281180225885,
+    "embedded_solar_capacity": -0.12835424481285618,
+    "embedded_wind_capacity": -0.12520021146190782,
+    "embedded_solar_generation": -0.0958937977346729,
+    "is_holiday": -0.07764272603409103
+  },
+  "acf_lag_48": 0.9005111204900709,
+  "acf_lag_336": 0.8980301520431734
 }

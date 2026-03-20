@@ -1,0 +1,38 @@
+# ============================================================
+# LSTM 配置
+# ============================================================
+
+seed: 221
+
+data:
+  csv_path: data/historic_demand_2009_2024_noNaN.csv
+  date_start: "2019-01-01"
+  date_end: "2024-12-31"
+  target: tsd
+  threshold_date_1: "01-01-2023"
+  threshold_date_2: "01-01-2024"
+
+features:
+  enabled: true
+  columns:
+    - is_day_off
+
+  cols_to_scale:
+    - tsd
+
+seq_len: 48
+batch_size: 144
+
+model:
+  type: lstm
+  d_model: 64            # LSTM 隐状态维度
+  num_layers: 2           # LSTM 堆叠层数
+  dropout: 0.5
+  bidirectional: false    # 是否使用双向 LSTM
+
+training:
+  num_epochs: 100
+  learning_rate: 5.0e-4
+  patience: 12
+  lr_factor: 0.5
+  lr_patience: 5

@@ -1,0 +1,49 @@
+# ============================================================
+# N-BEATS (Generic) 配置 —— 含特征工程
+# ============================================================
+
+seed: 221
+
+data:
+  csv_path: data/historic_demand_2009_2024_noNaN.csv
+  date_start: "2019-01-01"
+  date_end: "2024-12-31"
+  target: tsd
+  threshold_date_1: "01-01-2023"
+  threshold_date_2: "01-01-2024"
+
+features:
+  enabled: true
+  columns:
+    - is_holiday
+    - is_working_day
+    - is_daytime
+    - workday_peak
+    - sp_sin
+    - sp_cos
+    - dow_sin
+    - dow_cos
+    - doy_sin
+    - doy_cos
+  cols_to_scale:
+    - tsd
+
+seq_len: 48
+batch_size: 144
+
+model:
+  type: nbeats
+  seq_len: 48                  # 须与顶层 seq_len 一致（N-BEATS 全连接层需知道输入维度）
+  num_stacks: 2                # 栈数
+  num_blocks_per_stack: 3      # 每栈块数
+  num_fc_layers: 4             # 每块 FC 层数
+  fc_dim: 256                  # FC 隐藏维度
+  forecast_dim: 64             # 预测向量维度
+  dropout: 0.5
+
+training:
+  num_epochs: 50
+  learning_rate: 5.0e-4
+  patience: 12
+  lr_factor: 0.5
+  lr_patience: 5

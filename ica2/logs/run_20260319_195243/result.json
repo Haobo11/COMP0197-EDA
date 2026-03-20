@@ -1,0 +1,59 @@
+{
+  "timestamp": "20260319_195243",
+  "total_epochs": 2,
+  "best_val_loss": -2.3620706698933587,
+  "final_lr": 0.0005,
+  "train_losses": [
+    -1.3165936115172976,
+    -1.7858410846036563
+  ],
+  "val_losses": [
+    -2.1106145499182527,
+    -2.3620706698933587
+  ],
+  "metrics": {
+    "mape": 3.76,
+    "rmse": 1353.6
+  },
+  "config": {
+    "seed": 221,
+    "data": {
+      "csv_path": "data/historic_demand_2009_2024_noNaN.csv",
+      "date_start": "2019-01-01",
+      "date_end": "2024-12-31",
+      "target": "tsd",
+      "threshold_date_1": "01-01-2023",
+      "threshold_date_2": "01-01-2024"
+    },
+    "features": {
+      "enabled": true,
+      "columns": [
+        "doy_sin",
+        "doy_cos",
+        "dow_sin",
+        "dow_cos",
+        "is_day_off",
+        "is_evening_peak"
+      ],
+      "cols_to_scale": [
+        "tsd"
+      ]
+    },
+    "seq_len": 48,
+    "batch_size": 144,
+    "model": {
+      "type": "lstm",
+      "d_model": 64,
+      "num_layers": 2,
+      "dropout": 0.5,
+      "bidirectional": false
+    },
+    "training": {
+      "num_epochs": 2,
+      "learning_rate": 0.0005,
+      "patience": 12,
+      "lr_factor": 0.5,
+      "lr_patience": 5
+    }
+  }
+}

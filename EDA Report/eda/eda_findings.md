@@ -5,8 +5,10 @@ This note summarises the findings that directly support our final setup:
 - target variable: `tsd`
 - modelling window: `2019-01-01` to `2024-12-05`
 - main models: `LSTM` and `Transformer`
-- baselines: `CNN` and `ARIMA`
+- baseline: `SARIMA`
 - feature strategy: use all available features in the cleaned dataset
+
+This version adds a dedicated correlation-analysis block so EDA outputs can directly guide feature engineering choices for LSTM/Transformer.
 
 ## 1. Why we use 2019-2024
 
@@ -62,7 +64,7 @@ This figure affects the later modelling steps in three ways:
 - recent-period evaluation is more important than average performance across all years
 - the model must learn both repeated seasonality and slower distribution shift
 
-This is one reason we selected LSTM and Transformer as the main models. They are better suited than simpler fixed-structure models to learning both local temporal patterns and broader context changes.
+This is one reason we selected LSTM and Transformer as the main models. They are better suited than simpler fixed-structure models to learning both local temporal patterns and broader context changes, while SARIMA gives us a classical forecasting baseline.
 
 ## 5. Intraday and seasonal structure
 
@@ -92,11 +94,7 @@ This tells us several things:
 
 For the next steps, this supports using sequence models with enough capacity to learn recurring half-hour structure. It also justifies keeping all time-related and system-related features, because a fixed daily template is clearly not enough.
 
-This figure is also useful for baseline interpretation:
-
-- `ARIMA` provides a classical reference for recurring temporal structure
-- `CNN` can test whether local temporal filters are enough
-- `LSTM` and `Transformer` can then be judged on whether they better capture ramping and peak structure
+This figure is also useful for baseline interpretation. SARIMA provides a classical time-series benchmark for recurring temporal structure, while LSTM and Transformer can then be judged on whether they better capture half-hourly ramping, seasonal changes in peak amplitude, and non-linear interactions across features.
 
 ## 6. Calendar effects
 
@@ -138,7 +136,28 @@ Other variables appear less dominant individually, but still carry useful system
 
 We should not treat correlation as causality, but this is still enough to justify our current feature strategy: keep all cleaned features in the first version, then test ablations later if needed.
 
-## 8. What these figures change in the modelling pipeline
+## 8. Correlation analysis for feature engineering
+
+![Feature correlation](figures/figure_08_feature_correlation.png)
+
+We compute both Pearson and Spearman correlation to avoid relying on only one relationship type. This gives a more stable first-pass ranking of variables associated with `tsd` and helps identify redundant groups.
+
+![Lagged correlation](figures/figure_09_lagged_correlation.png)
+
+This figure tracks `corr(feature[t-k], tsd[t])` up to one week (`k=336` half-hour steps). It is the key bridge from EDA to sequence feature design:
+
+- if correlation persists around `k=48` or `k=336`, lag features are plausible candidates
+- if correlation decays immediately, explicit lag engineering for that feature is lower priority
+
+![Target autocorrelation](figures/figure_10_tsd_acf.png)
+
+Target ACF confirms how much temporal memory exists in `tsd` itself. This supports our current sequence setup and justifies testing daily/weekly lag references in ablations.
+
+![Seasonal correlation](figures/figure_11_seasonal_correlation.png)
+
+Feature-target correlation changes by season, which means global correlation alone is not enough. This is why we keep the multivariate setup and evaluate errors by period, not only by one aggregate metric.
+
+## 9. What these figures change in the modelling pipeline
 
 Each figure informs a specific later step.
 
@@ -160,9 +179,13 @@ This is why our final plan is:
 3. dataset = cleaned table
 4. features = all available cleaned features
 5. main models = `LSTM` and `Transformer`
-6. baselines = `CNN` and `ARIMA`
+6. baseline = `SARIMA`
 
-## 9. Variable reference
+We also export a direct mapping table from EDA signals to modelling actions:
+
+- `outputs/eda_to_model_decisions.csv`
+
+## 10. Variable reference
 
 A full variable table is provided here:
 

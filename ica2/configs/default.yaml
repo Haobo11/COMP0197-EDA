@@ -1,0 +1,52 @@
+# ============================================================
+# 默认超参数配置
+# ============================================================
+
+seed: 221
+
+# --- 数据 ---
+data:
+  csv_path: data/historic_demand_2009_2024_noNaN.csv
+  date_start: "2019-01-01"
+  date_end: "2024-12-31"
+  target: tsd
+  threshold_date_1: "01-01-2023"   # train/val 分界
+  threshold_date_2: "01-01-2024"   # val/test 分界
+
+# --- 特征工程（设 enabled: false 则仅用历史 tsd） ---
+features:
+  enabled: true
+  columns:
+    - is_holiday
+    - is_working_day
+    - is_daytime
+    - workday_peak
+    - sp_sin
+    - sp_cos
+    - dow_sin
+    - dow_cos
+    - doy_sin
+    - doy_cos
+  cols_to_scale:         # 仅归一化 tsd；sin/cos 已在 [-1,1]，is_holiday 为 0/1
+    - tsd
+
+# --- 序列与批次 ---
+seq_len: 48
+batch_size: 144
+
+# --- 模型 ---
+model:
+  type: transformer    # transformer / lstm（以后扩展）
+  d_model: 64
+  nhead: 4
+  num_layers: 2
+  dim_feedforward: 128
+  dropout: 0.5
+
+# --- 训练 ---
+training:
+  num_epochs: 50
+  learning_rate: 5.0e-4
+  patience: 12
+  lr_factor: 0.5
+  lr_patience: 5
